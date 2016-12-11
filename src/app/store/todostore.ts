@@ -16,7 +16,10 @@ export default class TodoStore {
             new TodoItem().setText('learn ng2')
         ]);
         setTimeout(() => {
-            this.itemsSubject.next(this.itemsSubject.getValue().merge(mockedState));
+            console.log(this.itemsSubject.getValue());
+            this.itemsSubject.next(this.itemsSubject.getValue()
+                .concat(mockedState)
+            );
         }, 2000);
     }
 
