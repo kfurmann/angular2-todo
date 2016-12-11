@@ -1,28 +1,57 @@
-import { List } from 'immutable';
-import { TodoItem } from './todoitem';
-import { createStore } from 'redux';
-import { reducer, ITodoAction } from './reducer';
+import {List} from 'immutable';
+import {TodoItem} from './todoitem';
+import {Observable, BehaviorSubject} from 'rxjs/Rx';
 
 export default class TodoStore {
-  store: Redux.Store;
+    store: Redux.Store;
 
-  constructor() {
-    const storedItemsString = <string> localStorage.getItem('todolist') || '[]';
-    const storedItems = <Array<any>> JSON.parse(storedItemsString);
-    const items = List<TodoItem>(storedItems.map(i => new TodoItem(i._data)));
-    this.store = createStore(reducer, items);
+    public itemsStream: Observable<List<TodoItem>>;
+    private itemsSubject: BehaviorSubject<List<TodoItem>> = new BehaviorSubject(List<TodoItem>());
 
-    this.store.subscribe(() => {
-      localStorage.setItem('todolist', JSON.stringify(this.items.toJS()));
-    });
-  }
+    constructor() {
 
+        this.itemsStream = Observable.from(this.itemsSubject);
+        const mockedState = List<TodoItem>([
+            new TodoItem().setText('hit gym'),
+            new TodoItem().setText('learn ng2')
+        ]);
+        setTimeout(() => {
+            console.log(this.itemsSubject.getValue());
+            this.itemsSubject.next(this.itemsSubject.getValue()
+                .concat(mockedState)
+            );
+        }, 2000);
+    }
 
-  get items(): List<TodoItem> {
-    return this.store.getState();
-  }
+    addItem(itemText: string) {
+        const newItem = new TodoItem()
+            .setText(itemText);
+        this.itemsSubject.next(this.itemsSubject.getValue().push(newItem));
+    }
 
-  dispatch(action: ITodoAction) {
-    this.store.dispatch(action);
-  }
+    removeItem(itemId: string) {
+        this.itemsSubject.next(
+            List<TodoItem>(this.itemsSubject.getValue().filter((i: TodoItem) => i.uuid !== itemId))
+        );
+    }
+
+    updateItemText(itemId: string, text: string) {
+        this.itemsSubject.next(
+            this.itemsSubject.getValue().update(
+                this.indexOf(this.itemsSubject.getValue(), itemId), (i: TodoItem) => i.setText(text)
+            )
+        );
+    }
+
+    updateItemCompletion(itemId: string, itemCompleted: boolean) {
+        this.itemsSubject.next(
+            this.itemsSubject.getValue().update(
+                this.indexOf(this.itemsSubject.getValue(), itemId), (i: TodoItem) => i.setCompleted(itemCompleted)
+            )
+        );
+    }
+
+    private indexOf(items: List<TodoItem>, uuid: string) {
+        return items.findIndex((i: TodoItem) => i.uuid === uuid);
+    }
 }

@@ -1,42 +1,42 @@
 import {Component} from 'angular2/core';
 import TodoStore from '../store/todostore';
-import TodoItem from '../todoitem/todoitem';
+import TodoItemComponent from '../todoitem/todoitem';
 import ItemUpdatedEvent from '../todoitem/itemupdatedevent';
-import {addItem, removeItem, updateItemText, updateItemCompletion} from '../store/actions';
+import {ChangeDetectionStrategy} from 'angular2/src/core/change_detection/constants';
 
 @Component({
   selector: 'todo-list',
   templateUrl: 'app/todolist/todolist.html',
   styleUrls: ['app/todolist/todolist.css'],
-  directives: [TodoItem]
+  directives: [TodoItemComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export default class TodoList {
   newItem = 'test';
-  store: TodoStore;
 
-  constructor(store: TodoStore) {
-    this.store = store;
+  constructor(private store: TodoStore) {
+    //
   }
 
   addItem() {
-    this.store.dispatch(addItem(this.newItem));
+    this.store.addItem(this.newItem);
     this.newItem = '';
   }
 
   removeItem(itemId: string) {
-    this.store.dispatch(removeItem(itemId));
+    this.store.removeItem(itemId);
   }
 
   itemUpdated(event: ItemUpdatedEvent) {
     if (event.text !== undefined) {
       if (event.text === '') {
-        this.store.dispatch(removeItem(event.itemId));
+        this.store.removeItem(event.itemId);
       } else {
-        this.store.dispatch(updateItemText(event.itemId, event.text));
+        this.store.updateItemText(event.itemId, event.text);
       }
     }
     if (event.completed !== undefined) {
-      this.store.dispatch(updateItemCompletion(event.itemId, event.completed));
+      this.store.updateItemCompletion(event.itemId, event.completed);
     }
   }
 
