@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, ChangeDetectionStrategy} from 'angular2/core';
+  import {Component, Input, Output, EventEmitter, ChangeDetectionStrategy} from 'angular2/core';
 import {TodoItem as TodoItemModel} from './../store/todoitem';
 import ItemUpdatedEvent from './itemupdatedevent';
 

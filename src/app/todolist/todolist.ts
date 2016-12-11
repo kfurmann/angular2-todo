@@ -2,7 +2,6 @@ import {Component} from 'angular2/core';
 import TodoStore from '../store/todostore';
 import TodoItem from '../todoitem/todoitem';
 import ItemUpdatedEvent from '../todoitem/itemupdatedevent';
-import {addItem, removeItem, updateItemText, updateItemCompletion} from '../store/actions';
 
 @Component({
   selector: 'todo-list',
@@ -19,24 +18,24 @@ export default class TodoList {
   }
 
   addItem() {
-    this.store.dispatch(addItem(this.newItem));
+    this.store.addItem(this.newItem);
     this.newItem = '';
   }
 
   removeItem(itemId: string) {
-    this.store.dispatch(removeItem(itemId));
+    this.store.removeItem(itemId);
   }
 
   itemUpdated(event: ItemUpdatedEvent) {
     if (event.text !== undefined) {
       if (event.text === '') {
-        this.store.dispatch(removeItem(event.itemId));
+        this.store.removeItem(event.itemId);
       } else {
-        this.store.dispatch(updateItemText(event.itemId, event.text));
+        this.store.updateItemText(event.itemId, event.text);
       }
     }
     if (event.completed !== undefined) {
-      this.store.dispatch(updateItemCompletion(event.itemId, event.completed));
+      this.store.updateItemCompletion(event.itemId, event.completed);
     }
   }
 
