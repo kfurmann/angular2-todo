@@ -12,7 +12,7 @@ const paths = {
   distFiles: 'dist/**/*',
   srcFiles: 'src/**/*',
   srcTsFiles: 'src/**/*.ts',
-}
+};
 
 // clean the contents of the distribution directory
 gulp.task('clean', function () {

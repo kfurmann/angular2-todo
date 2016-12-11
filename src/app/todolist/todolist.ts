@@ -2,16 +2,14 @@ import {Component} from 'angular2/core';
 import TodoStore from '../store/todostore';
 import TodoItemComponent from '../todoitem/todoitem';
 import ItemUpdatedEvent from '../todoitem/itemupdatedevent';
-// import {ChangeDetectionStrategy} from 'angular2/src/core/change_detection/constants';
-import {List} from 'immutable';
-import {TodoItem} from '../store/todoitem';
+import {ChangeDetectionStrategy} from 'angular2/src/core/change_detection/constants';
 
 @Component({
   selector: 'todo-list',
   templateUrl: 'app/todolist/todolist.html',
   styleUrls: ['app/todolist/todolist.css'],
   directives: [TodoItemComponent],
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export default class TodoList {
   newItem = 'test';
