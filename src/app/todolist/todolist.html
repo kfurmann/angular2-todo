@@ -7,7 +7,7 @@
   </header>
   <section class="main">
     <ul class="todo-list">
-      <todo-item *ngFor="#item of items"
+      <todo-item *ngFor="#item of store.items"
         [item]="item"
         (done)="removeItem($event)"
         (itemUpdated)="itemUpdated($event)">

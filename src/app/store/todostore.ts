@@ -7,7 +7,13 @@ export default class TodoStore {
     private _items: List<TodoItem> = List<TodoItem>();
 
     constructor() {
-        //
+
+        // setTimeout(() => {
+        //     this._items = List<TodoItem>([
+        //         new TodoItem().setText('hit gym'),
+        //         new TodoItem().setText('learn ng2')
+        //     ]);
+        // }, 2000);
     }
 
     get items(): List<TodoItem> {
@@ -21,7 +27,7 @@ export default class TodoStore {
     }
 
     removeItem(itemId: string) {
-        this._items = List<TodoItem>(this._items.filter((i: TodoItem) => i.uuid !== itemId))
+        this._items = List<TodoItem>(this._items.filter((i: TodoItem) => i.uuid !== itemId));
     }
 
     updateItemText(itemId: string, text: string) {
